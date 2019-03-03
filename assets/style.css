@@ -1,0 +1,32 @@
+<style>
+	body{
+	background: url('C:\Giphy\assets\images\tv.jpg');
+	font-family: 'Raleway', sans-serif;
+	background-repeat: no-repeat;
+	font-size: 25px;
+	background-size: 100%;
+	height: 100%;
+}
+h1 {
+	color: white;
+	text-align: center;
+}
+p{
+	color: white;
+
+	text-align: center;
+}
+#addGifKey{
+	color: white;
+	text-align: center;
+}
+.buttons{
+	color: white;
+	text-align: center;
+}
+#header {
+
+background: grey;
+opacity: 0.9;
+}
+</style>

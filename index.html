@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="C:\Giphy\assets\style.css" rel="stylesheet">
+    <title>Tv Show Stars</title>
+<style>
+	body{
+	background: url('https://cdn.technologyreview.com/i/images/tv_0.jpg?sw=1122');
+	font-family: 'Raleway', sans-serif;
+	background-repeat: no-repeat;
+	font-size: 25px;
+	background-size: 100%;
+	height: 100%;
+}
+h1 {
+	color: white;
+	text-align: center;
+}
+p{
+	color: white;
+
+	text-align: center;
+}
+#addGifKey{
+	color: white;
+	text-align: center;
+}
+.buttons{
+	color: white;
+	text-align: center;
+}
+#header {
+
+background: grey;
+opacity: 0.9;
+}
+</style>
+
+</head>
+
+<body>
+
+    <h1>What's on the Box!</h1>
+    <hr>
+	<div id="header">
+    <p>Click the buttons to get some GIFs on your favourtie stars. Click on each gif to animate them. Click them again to stop their animation</p>
+
+    <p>Don't see your favorite. Add your own!</p>
+	
+</div>
+    <div id="button-container" class="buttons">
+      
+    </div>
+	<br>
+    <div id="addGifKey">
+        <form class="addGifButtonArea">
+            Add buttons for your favorite types of dance:
+            <br>
+            <input type="text" name="gifButtonSpot" id="gifButtonSpot" class="comic-sans-font">
+            <input type="submit" value="Submit" class="btn" id="submit">
+        </form>
+
+    </div>
+
+    <div id="gifSpace" class="gifSpot">
+    </div>
+
+
+
+
+
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var keyWords = ["Pheobe", "Chandler", "Monica", "Rachel", "Ross",
+            "spongebob"
+        ];
+        function renderButtons() {
+            console.log("render buttons was activated");
+            for (var i = 0; i < keyWords.length; i++) {
+                var newButton = $("<button>");
+                newButton.addClass("btn");
+                newButton.addClass("topic-button");
+              
+                $(newButton).attr('id', 'key-item');
+                newButton.text(keyWords[i]);
+                $("#button-container").append(newButton);
+            }
+            $(".topic-button").unbind("click");
+            $(".topic-button").on("click", function () {
+                $(".gif-image").unbind("click");
+                $("#gifSpace").empty();
+                $("#gifSpace").removeClass("dotted-border");
+                populateGIFdiv($(this).text());
+            });
+        }
+        function addButton(show) {
+            console.log("add button function was activated");
+            if (keyWords.indexOf(show) === -1) {
+                keyWords.push(show);
+                $("#button-container").empty();
+                renderButtons();
+            }
+        }
+        function populateGIFdiv(show) {
+            console.log("populate GIF container  was activated");
+            $.ajax({
+                url: "https://api.giphy.com/v1/gifs/search?q=" + show +
+                    "&api_key=9UilJqWOcr0NaFSL4j9arpheKsuajdXG",
+                method: "GET"
+            }).then(function (response) {
+                response.data.forEach(function (element) {
+                    newDiv = $("<div>");
+                    newDiv.addClass("individual-gif-container");
+                    newDiv.append("<p>Rating: " + element.rating.toUpperCase() +
+                        "</p>");
+                    var newImage = $("<img src = '" + element.images.fixed_height_still
+                        .url + "'>");
+                    newImage.addClass("gif-image");
+                    newImage.attr("state", "still");
+                    newImage.attr("still-data", element.images.fixed_height_still
+                        .url);
+                    newImage.attr("animated-data", element.images.fixed_height
+                        .url);
+                    newDiv.append(newImage);
+                    $("#gifSpace").append(newDiv);
+                });
+                $("#gifSpace").addClass("dotted-border");
+                $(".gif-image").unbind("click");
+                $(".gif-image").on("click", function () {
+                    if ($(this).attr("state") === "still") {
+                        $(this).attr("state", "animated");
+                        $(this).attr("src", $(this).attr("animated-data"));
+                    } else {
+                        $(this).attr("state", "still");
+                        $(this).attr("src", $(this).attr("still-data"));
+                    }
+                });
+            });
+        }
+        $(document).ready(function () {
+            renderButtons();
+            $("#submit").on("click", function () {
+                console.log("submit was activated via click");
+                event.preventDefault();
+                addButton($("#gifButtonSpot").val().trim());
+                $("#gifButtonSpot").val("");
+            });
+        });
+    </script>
+
+</body>
+
+</html>
